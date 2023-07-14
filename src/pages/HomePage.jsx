@@ -6,7 +6,7 @@ import useAuth from "../hooks/auth"
 import { useState } from "react"
 import { useEffect } from "react"
 import dayjs from "dayjs"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import SearchBar from "../components/ SearchBar"
 import HomeStyle from "../style/GlobalStyle"
@@ -15,6 +15,7 @@ import { BiDownArrow } from "react-icons/bi";
 export default function HomePage() {
     const [cartItems, setCartItems] = useState(0);
     const { userAuth, login } = useAuth();
+    const navigate = useNavigate()
 
     const products = [
         {
@@ -30,13 +31,13 @@ export default function HomePage() {
             price: 99.99,
         },
         {
-            id: 2,
+            id: 3,
             image: "https://static.netshoes.com.br/produtos/tenis-adidas-breaknet-feminino/28/NQQ-4379-028/NQQ-4379-028_zoom1.jpg?ts=1689262673&",
             title: "Example Sneaker 2",
             price: 99.99,
         },
         {
-            id: 2,
+            id: 4,
             image: "https://static.netshoes.com.br/produtos/tenis-adidas-breaknet-feminino/28/NQQ-4379-028/NQQ-4379-028_zoom1.jpg?ts=1689262673&",
             title: "Example Sneaker 2",
             price: 99.99,
@@ -48,10 +49,12 @@ export default function HomePage() {
             <HomeStyle />
             <Header>
                 <BiExit />
-                <CartIcon>
+
+                <CartIcon onClick={() => navigate("/checkout")}>
                     <AiOutlineShoppingCart />
                     <CartCount>{cartItems}</CartCount>
                 </CartIcon>
+
             </Header>
             <TextHome data-test="user-name">
                 <p>Olá, {userAuth.userName}</p> <br />
