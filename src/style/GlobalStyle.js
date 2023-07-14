@@ -55,4 +55,4 @@ import { createGlobalStyle } from "styled-components";
 //     }
 // `
 
-export default GlobalStyle
+//export default GlobalStyle
