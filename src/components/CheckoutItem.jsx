@@ -1,12 +1,14 @@
 import styled from "styled-components"
 
-export default function CheckoutItem(){
+export default function CheckoutItem(props){
+    const { name, image, price } = props;
+
     return (
         <SCItemBox>
-            <img src="https://imgnike-a.akamaihd.net/768x768/024226ID.jpg" alt="Lebron 20" />
+            <img src={image} alt={name} />
             <div>
-                <SCItemName>Nike Air Max</SCItemName>
-                <SCItemPrice>R$ 350,00</SCItemPrice>
+                <SCItemName>{name}</SCItemName>
+                <SCItemPrice>R$ {price}</SCItemPrice>
             </div>
         </SCItemBox>
     )

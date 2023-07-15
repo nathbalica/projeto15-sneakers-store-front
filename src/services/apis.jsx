@@ -58,7 +58,26 @@ function updateTransaction(transactionId, token, body) {
     return promise;
   }
 
+function getOrder(token) {
+    const config = configToken(token);
+    const promise = axios.get(`${import.meta.env.VITE_API_URL}/checkout`, config);
 
+    return promise;
+}
+
+function finishOrder(token) {
+    const config = configToken(token);
+    const promise = axios.delete(`${import.meta.env.VITE_API_URL}/checkout`, config);
+
+    return promise;
+}
+
+function cancelOrder(token){
+    const config = configToken(token);
+    const promise = axios.delete(`${import.meta.env.VITE_API_URL}/cancel-checkout`, config);
+
+    return promise;
+}
 
 const apis = {
     login,
@@ -67,7 +86,10 @@ const apis = {
     getTransaction,
     createTransaction,
     deleteTransaction,
-    updateTransaction
+    updateTransaction,
+    getOrder,
+    finishOrder,
+    cancelOrder
 }
 
 export default apis;

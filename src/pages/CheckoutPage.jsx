@@ -1,30 +1,74 @@
 import styled from "styled-components"
 import CheckoutItem from "../components/CheckoutItem"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import apis from "../services/apis";
+import useAuth from "../hooks/auth";
+import { useNavigate } from "react-router-dom";
 
 export default function CheckoutPage() {
 
     const [finish, setFinish] = useState(false);
+    const [address, setAddress] = useState('');
+    const { userAuth } = useAuth();
+    const { token, userName } = userAuth;
+    const [total, setTotal] = useState(0);
+    const [items, setItems] = useState([]);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        apis.getOrder(token)
+            .then(res => {
+                setItems(res.data)
+                items.forEach(item => setTotal(prevTotal => prevTotal + item.price));
+            })
+            .catch(res => console.log(res));
+    },[])
+
+    function finishPurchase() {
+        setFinish(true);
+        apis.finishOrder(token)
+            .then(res => console.log('Compra Concluída'))
+            .catch(res => console.log("Falha ao concluir compra"));
+    }
+
+    function goBackCart() {
+        apis.cancelOrder(token)
+            .then(res => console.log("Voltando ao carrinho..."))
+            .catch(res => console.log("Falha ao voltar para o carrinho"));
+
+        navigate('/cart');
+    }
+
+    function goBackHome() {
+        apis.cancelOrder(token)
+            .then(res => console.log("Voltando a home..."))
+            .catch(res => console.log("Falha ao voltar para a home"));
+
+        navigate('/home');
+    }
+    
 
     return (
         <>
             <SCHeader>
-                <ion-icon style={{width:"30px", height:"30px", marginLeft: "15px"}} name="chevron-back-outline"></ion-icon>
+                <ion-icon style={{width:"30px", height:"30px", marginLeft: "15px"}} name="chevron-back-outline" onClick={() => goBackCart()} ></ion-icon>
                 <p>Checkout</p>
-                <ion-icon style={{width:"30px", height:"26px", marginRight: "15px"}} name="home-outline"></ion-icon>
+                <ion-icon style={{width:"30px", height:"26px", marginRight: "15px"}} name="home-outline" onClick={() => goBackHome()}></ion-icon>
             </SCHeader>
             {!finish && (
             <>
-                <SCInputAdress> <input placeholder='Endereço' /></SCInputAdress>
+                <SCInputAdress> <input placeholder='Endereço' value={address} onChange={(e) => setAddress(e.target.value)} /></SCInputAdress>
+                {/* <CheckoutItem />
                 <CheckoutItem />
-                <CheckoutItem />
-                <CheckoutItem />
+                <CheckoutItem /> */}
+                {items.map(e => <CheckoutItem name={e.name} image={e.image} price={e.price} />)}
                 <SCTotal>
                     <p>Total:</p>
-                    <p>R$ 500,00</p>
+                    <p>R$ {total.toFixed(2).replace('.',',')}</p>
                 </SCTotal>
                 <SCContainerButton>
-                    <button onClick={() => setFinish(true)}> Concluir Compra </button>
+                    <button onClick={() => finishPurchase}> Concluir Compra </button>
                 </SCContainerButton>
             </>)}
             {finish && (
@@ -34,12 +78,12 @@ export default function CheckoutPage() {
                     <ion-icon style={{color:"#0ACF83", width: "100%", height:"90px"}} name="checkmark-circle-sharp"></ion-icon>
                 </SCCheck>
                 <SCInfos>
-                    <p>Nome: <span>Gabigol</span></p>
-                    <p>Endereço de entrega: <span>Av. Borges de Medeiros, 997</span></p>
-                    <p>Total: <span>R$ 500,00</span></p>
+                    <p>Nome: <span>{userName}</span></p>
+                    <p>Endereço de entrega: <span>{ address }</span></p>
+                    <p>Total: <span>R$ {total.toFixed(2).replace('.',',')}</span></p>
                 </SCInfos>
                 <SCContainerButton>
-                    <button> Continuar comprando </button>
+                    <button onClick={ () => navigate('/home')} > Continuar comprando </button>
                 </SCContainerButton>
             </>)}
         </>
@@ -72,9 +116,12 @@ const SCInputAdress = styled.div`
         width:300px;
         border: 1px solid #DBDBDB;
         border-radius: 10px;
-        padding-left: 20px;
+        padding: 0 20px 0 0;
+        font-size: 16px;
+        padding-left: 16px;
         &&placeholder{
-            font-family: 'Montserrat'
+            font-family: 'Montserrat';
+            font-size: 12px;
         }
     }
 `
