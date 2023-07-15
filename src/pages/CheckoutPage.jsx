@@ -37,7 +37,7 @@ export default function CheckoutPage() {
             .then(res => console.log("Voltando ao carrinho..."))
             .catch(res => console.log("Falha ao voltar para o carrinho"));
 
-        navigate('/cart');
+        navigate('/meu-carrinho');
     }
 
     function goBackHome() {
