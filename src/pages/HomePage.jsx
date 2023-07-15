@@ -7,13 +7,14 @@ import { useState } from "react"
 import { useEffect } from "react"
 import dayjs from "dayjs"
 import { Link, useNavigate } from "react-router-dom"
-import { AiOutlineShoppingCart } from "react-icons/ai";
+import { AiOutlineShoppingCart, AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 import SearchBar from "../components/ SearchBar"
 import HomeStyle from "../style/GlobalStyle"
 import { BiDownArrow } from "react-icons/bi";
 
 export default function HomePage() {
     const [cartItems, setCartItems] = useState(0);
+    const [sortOptionsVisible, setSortOptionsVisible] = useState(false);
     const { userAuth, login } = useAuth();
     const navigate = useNavigate()
 
@@ -44,6 +45,14 @@ export default function HomePage() {
         }
     ];
 
+    const toggleSortOptions = () => {
+        setSortOptionsVisible((prevState) => !prevState);
+    };
+
+    const handleSortOption = (option) => {
+        // Implemente a lógica para ordenar os produtos de acordo com a opção selecionada
+    };
+
     return (
         <HomeContainer>
             <HomeStyle />
@@ -65,9 +74,23 @@ export default function HomePage() {
             <ProductsContainerWrapper>
 
                 <ProductsContainer>
-                    <SortContainer>
+                    <SortContainer onClick={toggleSortOptions}>
                         <SortText>Ordenar por preço</SortText>
-                        <SortArrow />
+                        {sortOptionsVisible ? (
+                            <AiOutlineUp />
+                        ) : (
+                            <AiOutlineDown />
+                        )}
+                        {sortOptionsVisible && (
+                            <SortOptions>
+                                <SortOption onClick={() => handleSortOption("asc")}>
+                                    Preço Crescente
+                                </SortOption>
+                                <SortOption onClick={() => handleSortOption("desc")}>
+                                    Preço Decrescente
+                                </SortOption>
+                            </SortOptions>
+                        )}
                     </SortContainer>
 
 
@@ -168,30 +191,12 @@ const ProductsContainer = styled.ul`
   }
 `;
 
-const SortContainer = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 5px;
-  background-color: #fff;
-  border-radius: 10px;
-  width: 50%;
-  margin-left: 10px;
-  margin-bottom: 15px;
-`;
-
-const SortText = styled.span`
-  margin-right: 5px;
-`;
-
-const SortArrow = styled(BiDownArrow)`
-  font-size: 16px;
-`;
 
 
 const SneakerItem = styled.li`
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     background-color: #fff;
-    border-radius: 15px;
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
@@ -220,6 +225,49 @@ const SneakerPrice = styled.span`
   font-size: 16px;
   text-align: center; 
 `;
+
+
+const SortContainer = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  background-color: #fff;
+  /* border-radius: 10px; */
+
+  width: 50%;
+  margin-left: 10px;
+  margin-bottom: 15px;
+  cursor: pointer;
+`;
+
+const SortText = styled.span`
+  margin-right: 5px;
+`;
+
+const SortArrow = styled(BiDownArrow)`
+  font-size: 16px;
+`;
+
+const SortOptions = styled.div`
+width: 50%;
+  position: absolute;
+  top: 36px;
+  left: 10px;
+  background-color: #fff;
+  /* border-radius: 10px; */
+  padding: 5px;
+  /* box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); */
+`;
+
+const SortOption = styled.div`
+  padding: 5px;
+  cursor: pointer;
+  font-size: 14px;
+`;
+
+
+
+
 
 
 
