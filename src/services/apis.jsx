@@ -25,6 +25,12 @@ function logout(token){
     return promise;
 }
 
+function getSession(token) {
+    const promise = axios.get(`${import.meta.env.VITE_API_URL}/session/${token}`);
+
+    return promise;
+}
+
 
 function getTransaction(token) {
     const config = configToken(token)
@@ -64,6 +70,7 @@ const apis = {
     login,
     signUp,
     logout,
+    getSession,
     getTransaction,
     createTransaction,
     deleteTransaction,
