@@ -5,5 +5,10 @@ function addProductIntoCart(userId, item) {
     return promise;
 }
 
-const apiCart = { addProductIntoCart };
+function getCart(userId) {
+    const promise = axios.get(`${import.meta.env.VITE_API_URL}/cart/${userId}`);
+    return promise;
+}
+
+const apiCart = { addProductIntoCart, getCart };
 export default apiCart;
