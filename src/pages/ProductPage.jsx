@@ -11,6 +11,9 @@ import apiProduct from "../services/apiProduct";
 import AuthContext from "../contexts/AuthContext";
 import apis from "../services/apis";
 import apiCart from "../services/apiCart";
+import CartContext from "../contexts/CartContext";
+import { AiOutlineShoppingCart } from "react-icons/ai";
+import { CartCount, CartIcon } from "./HomePage";
 
 export default function ProductPage() {
     const id = useLocation().pathname.split("/").pop();
@@ -18,15 +21,18 @@ export default function ProductPage() {
     const [selectedSize, setSelectedSize] = useState(-1);
     const { userAuth } = useContext(AuthContext);
     const navigate = useNavigate();
+    const { cartItens, setCartItens } = useContext(CartContext);
 
     async function addProductCart() {
 
         try {
-            const { userId } = await apis.getSession(userAuth.token);
+            const response = await apis.getSession(userAuth.token);
+            const { userId } = response.data
 
             await apiCart.addProductIntoCart(userId, produto._id);
-            navigate("/produtos");
-            
+            setCartItens([...cartItens, produto._id]);
+            navigate("/home");
+
         } catch (err) {
             console.log(err);
         }
@@ -50,18 +56,20 @@ export default function ProductPage() {
     );
 
     return (
-        <PageContainer>
+        <>
             <Header />
-            <ProductCard produto={produto} />
-            <SizesBar
-                selectedSize={selectedSize}
-                setSelectedSize={setSelectedSize}
-                sizes={produto.size} />
-            <ProductDescription descricao={produto.description} />
-            <StyledButton
-                onClick={addProductCart}
-                disabled={(selectedSize === -1)}>Adicionar ao carrinho</StyledButton>
-        </PageContainer>
+            <PageContainer>
+                <ProductCard produto={produto} />
+                <SizesBar
+                    selectedSize={selectedSize}
+                    setSelectedSize={setSelectedSize}
+                    sizes={produto.size} />
+                <ProductDescription descricao={produto.description} />
+                <StyledButton
+                    onClick={addProductCart}
+                    disabled={(selectedSize === -1)}>Adicionar ao carrinho</StyledButton>
+            </PageContainer>
+        </>
     );
 }
 

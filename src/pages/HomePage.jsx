@@ -3,7 +3,7 @@ import { BiExit } from "react-icons/bi"
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai"
 import apis from "../services/apis"
 import useAuth from "../hooks/auth"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { useEffect } from "react"
 import dayjs from "dayjs"
 import { Link, useNavigate } from "react-router-dom"
@@ -11,33 +11,34 @@ import { AiOutlineShoppingCart } from "react-icons/ai";
 import SearchBar from "../components/ SearchBar"
 import HomeStyle from "../style/GlobalStyle"
 import { BiDownArrow } from "react-icons/bi";
+import CartContext from "../contexts/CartContext"
 
 export default function HomePage() {
-    const [cartItems, setCartItems] = useState(0);
+    const {cartItens} = useContext(CartContext);
     const { userAuth, login } = useAuth();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const products = [
         {
-            id: 1,
+            id: "64b32215df177c99cb30a0fa",
             image: "https://static.netshoes.com.br/produtos/tenis-adidas-breaknet-feminino/28/NQQ-4379-028/NQQ-4379-028_zoom1.jpg?ts=1689262673&",
             title: "Example Sneaker 1",
             price: 99.99,
         },
         {
-            id: 2,
+            id: "64b18a643ad12f8fd7a55187",
             image: "https://static.netshoes.com.br/produtos/tenis-adidas-breaknet-feminino/28/NQQ-4379-028/NQQ-4379-028_zoom1.jpg?ts=1689262673&",
             title: "Example Sneaker 2",
             price: 99.99,
         },
         {
-            id: 3,
+            id: "64b189703ad12f8fd7a55186",
             image: "https://static.netshoes.com.br/produtos/tenis-adidas-breaknet-feminino/28/NQQ-4379-028/NQQ-4379-028_zoom1.jpg?ts=1689262673&",
             title: "Example Sneaker 2",
             price: 99.99,
         },
         {
-            id: 4,
+            id: "64b18a643ad12f8fd7a55187",
             image: "https://static.netshoes.com.br/produtos/tenis-adidas-breaknet-feminino/28/NQQ-4379-028/NQQ-4379-028_zoom1.jpg?ts=1689262673&",
             title: "Example Sneaker 2",
             price: 99.99,
@@ -50,9 +51,9 @@ export default function HomePage() {
             <Header>
                 <BiExit />
 
-                <CartIcon onClick={() => navigate("/checkout")}>
+                <CartIcon onClick={() => navigate("/meu-carrinho")}>
                     <AiOutlineShoppingCart />
-                    <CartCount>{cartItems}</CartCount>
+                    {cartItens && <CartCount>{cartItens.length}</CartCount>}
                 </CartIcon>
 
             </Header>
@@ -73,7 +74,9 @@ export default function HomePage() {
 
                     <div>
                         {products.map((product) => (
-                            <SneakerItem key={product.id}>
+                            <SneakerItem
+                              onClick={() => navigate(`/produto/${product.id}`)}
+                              key={product.id}>
                                 <SneakerImage src={product.image} alt={product.title} />
                                 <SneakerTitle>{product.title}</SneakerTitle>
                                 <SneakerPrice>${product.price}</SneakerPrice>
@@ -124,12 +127,12 @@ const Header = styled.header`
   
 `
 
-const CartIcon = styled.div`
+export const CartIcon = styled.div`
   position: relative;
   margin-right: 10px;
 `;
 
-const CartCount = styled.span`
+export const CartCount = styled.span`
   position: absolute;
   top: -8px;
   right: -8px;
