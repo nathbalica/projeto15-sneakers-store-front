@@ -26,37 +26,36 @@ function logout(token){
 }
 
 
-function getTransaction(token) {
-    const config = configToken(token)
-    const promise = axios.get(`${import.meta.env.VITE_API_URL}/transactions`, config)
-
+function getProducts(token) {
+    const config = { headers: { Authorization: `Bearer ${token}` } };
+    const promise = axios.get(`${import.meta.env.VITE_API_URL}/products`, config);
     return promise;
 }
 
-function createTransaction(body, token) {
-    const config = configToken(token)
-    const promise = axios.post(`${import.meta.env.VITE_API_URL}/transactions`, body, config)
+// function createTransaction(body, token) {
+//     const config = configToken(token)
+//     const promise = axios.post(`${import.meta.env.VITE_API_URL}/transactions`, body, config)
 
-    return promise;
-}
+//     return promise;
+// }
 
-function deleteTransaction(transactionId, token){
-    const config = configToken(token)
-    const promise = axios.delete(`${import.meta.env.VITE_API_URL}/transactions/${transactionId}`, config)
+// function deleteTransaction(transactionId, token){
+//     const config = configToken(token)
+//     const promise = axios.delete(`${import.meta.env.VITE_API_URL}/transactions/${transactionId}`, config)
 
-    return promise;
-}
+//     return promise;
+// }
 
-function updateTransaction(transactionId, token, body) {
-    const config = configToken(token);
-    const promise = axios.put(
-      `${import.meta.env.VITE_API_URL}/transactions/${transactionId}`,
-      body,
-      config
-    );
+// function updateTransaction(transactionId, token, body) {
+//     const config = configToken(token);
+//     const promise = axios.put(
+//       `${import.meta.env.VITE_API_URL}/transactions/${transactionId}`,
+//       body,
+//       config
+//     );
   
-    return promise;
-  }
+//     return promise;
+//   }
 
 
 
@@ -64,10 +63,7 @@ const apis = {
     login,
     signUp,
     logout,
-    getTransaction,
-    createTransaction,
-    deleteTransaction,
-    updateTransaction
+    getProducts
 }
 
 export default apis;
