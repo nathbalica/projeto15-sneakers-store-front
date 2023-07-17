@@ -4,6 +4,8 @@ import { useEffect, useState } from "react"
 import apis from "../services/apis";
 import useAuth from "../hooks/auth";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import CartContext from "../contexts/CartContext";
 
 export default function CheckoutPage() {
 
@@ -13,6 +15,7 @@ export default function CheckoutPage() {
     // const { token, userName } = userAuth;
     const [total, setTotal] = useState(0);
     const [items, setItems] = useState([]);
+    const {cartItens, setCartItens} = useContext(CartContext);
 
     const navigate = useNavigate();
 
@@ -31,7 +34,7 @@ export default function CheckoutPage() {
         setFinish(true);
         apis.finishOrder(userAuth.token)
             .then(res => {
-                setItems([]);
+                setCartItens([]);
                 console.log('Compra Concluída')
             })
             .catch(res => console.log("Falha ao concluir compra"));
