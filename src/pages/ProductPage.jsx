@@ -1,4 +1,4 @@
-import Header from "../components/Header";
+import Header from "../components/Header/Header";
 import ProductCard from "../components/ProductCard";
 import ProductDescription from "../components/ProductDescription";
 import SizesBar from "../components/SizesBar";
@@ -12,8 +12,7 @@ import AuthContext from "../contexts/AuthContext";
 import apis from "../services/apis";
 import apiCart from "../services/apiCart";
 import CartContext from "../contexts/CartContext";
-import { AiOutlineShoppingCart } from "react-icons/ai";
-import { CartCount, CartIcon } from "./HomePage";
+
 
 export default function ProductPage() {
     const id = useLocation().pathname.split("/").pop();

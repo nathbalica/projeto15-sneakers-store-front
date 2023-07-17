@@ -5,7 +5,7 @@ import ProductPage from "./pages/ProductPage"
 import MyCart from "./pages/MyCartPage"
 import SignInPage from "./pages/SignInPage"
 import SignUpPage from "./pages/SignUpPage"
-import HomePage from "./pages/HomePage"
+import HomePage from "./pages/Home/HomePage"
 import CheckoutPage from "./pages/CheckoutPage"
 import { CartContextProvider } from "./contexts/CartContext"
 
@@ -22,8 +22,6 @@ export default function App() {
 
 
             <Route path="/home" element={<HomePage />} />
-            {/* <Route path="/nova-transacao/:type" element={<TransactionsPage />} />
-            <Route path="/editar-registro/:type/:id" element={<EditTransactionPage />} /> */}
             <Route path="/produto/:id" element={<ProductPage />} />
             <Route path="/meu-carrinho" element={<MyCart />} />
             <Route path='/checkout' element={<CheckoutPage />} />
