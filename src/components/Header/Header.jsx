@@ -1,11 +1,11 @@
 import React from "react";
-// import { BiExit } from "react-icons/bi";
+import { BiExit } from "react-icons/bi";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { CartCount, CartIcon } from "../pages/HomePage";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useContext } from "react";
-import CartContext from "../contexts/CartContext";
+import CartContext from "../../contexts/CartContext";
+import { CartIcon, CartCount } from "./styles";
 
 // export default function Header({ cartItems, navigateToCheckout }) {
 //   return (
@@ -25,7 +25,7 @@ export default function Header() {
 
   return (
       <StyledHeader>
-          <ion-icon onClick={() => navigate(-1)} name="chevron-back-outline"></ion-icon>
+          <BiExit color="#fff" />
           <CartIcon onClick={() => navigate("/meu-carrinho")}>
               <AiOutlineShoppingCart />
               {cartItens && <CartCount>{cartItens.length}</CartCount>}
@@ -46,22 +46,6 @@ const StyledHeader = styled.div`
   background-color: #038754;
   height: 50px;
   overflow: hidden;
-`;
-
-export const CartIcon = styled.div`
-  position: relative;
-  margin-right: 10px;
-`;
-
-export const CartCount = styled.span`
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background-color: red;
-  color: white;
-  border-radius: 50%;
-  padding: 4px;
-  font-size: 12px;
 `;
 
 export const HeaderContainer = styled.header`

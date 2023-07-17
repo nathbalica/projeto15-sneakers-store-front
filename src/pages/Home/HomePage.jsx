@@ -20,7 +20,7 @@ import {
   LoadMoreButton,
 } from "./HomePageStyles";
 import { BiDownArrow } from "react-icons/bi";
-import Header from "../../components/Header";
+import Header from "../../components/Header/Header";
 import TextHome from "./TextHome";
 import SortOptions from "./SortOptions";
 import BrandOptions from "./BrandOptions";
@@ -155,13 +155,14 @@ export default function HomePage() {
   }
 
   const navigateToCheckout = () => {
-    navigate("/checkout");
+    navigate("/meu-carrinho");
   };
 
   return (
     <HomeContainer>
       <HomeStyle />
-      <Header cartItems={cartItems} navigateToCheckout={navigateToCheckout} />
+      <Header cartItems={cartItems} navigateToCheckout={navigateToCheckout}
+      />
       <TextHome userName={userAuth.userName} />
       <SearchBar
         handleSearch={handleSearch}
@@ -192,29 +193,35 @@ export default function HomePage() {
             {(searchFilteredProducts.length > 0
               ? searchFilteredProducts
               : products.filter(
-                  (product) => selectedBrand === "" || product.brand === selectedBrand
-                )
+                (product) => selectedBrand === "" || product.brand === selectedBrand
+              )
             )
               .slice(0, currentPage * perPage)
               .map((product) => (
-                <SneakerItem key={product._id}>
+                <SneakerItem
+                  key={product._id}
+                  onClick={() => navigate(`/produto/${product._id}`)}
+                >
                   <SneakerImage src={product.image} alt={product.title} />
                   <SneakerTitle>{product.name}</SneakerTitle>
                   <SneakerPrice>${product.price}</SneakerPrice>
                 </SneakerItem>
               ))}
-              : {products
-                .filter(
-                  (product) => selectedBrand === "" || product.brand === selectedBrand
-                )
-                .slice(0, currentPage * perPage)
-                .map((product) => (
-                  <SneakerItem key={product._id}>
-                    <SneakerImage src={product.image} alt={product.title} />
-                    <SneakerTitle>{product.name}</SneakerTitle>
-                    <SneakerPrice>${product.price}</SneakerPrice>
-                  </SneakerItem>
-                ))}
+            : {products
+              .filter(
+                (product) => selectedBrand === "" || product.brand === selectedBrand
+              )
+              .slice(0, currentPage * perPage)
+              .map((product) => (
+                <SneakerItem
+                  key={product._id}
+                  onClick={() => navigate(`/produto/${product._id}`)}
+                >
+                  <SneakerImage src={product.image} alt={product.title} />
+                  <SneakerTitle>{product.name}</SneakerTitle>
+                  <SneakerPrice>${product.price}</SneakerPrice>
+                </SneakerItem>
+              ))}
             {/* {products
               .filter(
                 (product) => selectedBrand === "" || product.brand === selectedBrand
