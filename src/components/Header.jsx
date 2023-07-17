@@ -20,13 +20,14 @@ export default function Header() {
     );
 }
 
-const StyledHeader = styled.div`
+export const StyledHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 2px 5px 5px;
   margin-bottom: 15px;
   font-size: 26px;
+  font-family: 'Montserrat', sans-serif;
   border: #292929;
   background-color: #038754;
   height: 50px;

@@ -12,8 +12,6 @@ import AuthContext from "../contexts/AuthContext";
 import apis from "../services/apis";
 import apiCart from "../services/apiCart";
 import CartContext from "../contexts/CartContext";
-import { AiOutlineShoppingCart } from "react-icons/ai";
-import { CartCount, CartIcon } from "./HomePage";
 
 export default function ProductPage() {
     const id = useLocation().pathname.split("/").pop();
@@ -30,7 +28,8 @@ export default function ProductPage() {
             const { userId } = response.data
 
             await apiCart.addProductIntoCart(userId, produto._id);
-            setCartItens([...cartItens, produto._id]);
+            setCartItens([...cartItens, produto]);
+            alert("Produto adicionado ao carrinho!");
             navigate("/home");
 
         } catch (err) {
@@ -67,7 +66,8 @@ export default function ProductPage() {
                 <ProductDescription descricao={produto.description} />
                 <StyledButton
                     onClick={addProductCart}
-                    disabled={(selectedSize === -1)}>Adicionar ao carrinho</StyledButton>
+                    disabled={(selectedSize === -1)}
+                    width="217px">Adicionar ao carrinho</StyledButton>
             </PageContainer>
         </>
     );

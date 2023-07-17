@@ -14,9 +14,9 @@ import { BiDownArrow } from "react-icons/bi";
 import CartContext from "../contexts/CartContext"
 
 export default function HomePage() {
-    const {cartItens} = useContext(CartContext);
     const { userAuth, login } = useAuth();
     const navigate = useNavigate();
+    const {cartItens, setCartItens} = useContext(CartContext);
 
     const products = [
         {

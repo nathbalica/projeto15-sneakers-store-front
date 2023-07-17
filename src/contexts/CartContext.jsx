@@ -2,6 +2,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 import apiCart from "../services/apiCart";
 import AuthContext from "./AuthContext";
 import apis from "../services/apis";
+import apiProduct from "../services/apiProduct";
+import { useLocation } from "react-router-dom";
 
 const CartContext = createContext();
 
@@ -14,16 +16,26 @@ export function CartContextProvider({ children }) {
 
       try {
         const response = await apis.getSession(userAuth.token);
-        const { userId } = response.data
+        const { userId } = response.data;
 
-        const cart = await apiCart.getCart(userId);
-        setCartItens(cart.data.itens);
+        const fetchCart = await apiCart.getCart(userId);
+        const transformedProds = [];
+        fetchCart.data.itens.forEach(id => {
+            apiProduct.getProduct(id)
+                .then(res => {
+                    transformedProds.push(res.data);
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        });
+        
+        setCartItens(transformedProds);
 
       } catch (err) {
         console.log(err);
       }
     }
-
     fetchCart();
 
   }, []);
