@@ -27,6 +27,7 @@ export const SortOptionsContainer = styled.div`
   border-radius: 5px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   width: 100%;
+  z-index: 0;
 `;
 
 export const SortOption = styled.div`

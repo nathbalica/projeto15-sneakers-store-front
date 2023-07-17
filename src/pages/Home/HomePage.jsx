@@ -35,7 +35,7 @@ export default function HomePage() {
   const [selectedBrand, setSelectedBrand] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [loadedProductsCount, setLoadedProductsCount] = useState(0);
-  const [loadedButtonText, setLoadedButtonText] = useState("Carregar mais");
+  const [searchFilteredProducts, setSearchFilteredProducts] = useState([]);
   const { userAuth, login } = useAuth();
   const productsContainerRef = useRef(null);
   const navigate = useNavigate();
@@ -114,26 +114,6 @@ export default function HomePage() {
   }, [currentPage, products, selectedBrand]);
 
 
-  // useEffect(() => {
-  //   if (selectedBrand === "") {
-  //     setLoadedProductsCount(currentPage * perPage);
-  //   } else {
-  //     const filteredProducts = products.filter(
-  //       (product) => product.brand === selectedBrand
-  //     );
-  //     const totalPages = Math.ceil(filteredProducts.length / perPage);
-  //     if (currentPage <= totalPages) {
-  //       setLoadedProductsCount(currentPage * perPage);
-  //     } else {
-  //       setCurrentPage(1);
-  //       setLoadedProductsCount(perPage);
-  //       productsContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
-  //     }
-  //   }
-
-  // }, [currentPage, products, selectedBrand, loadedProductsCount]);
-
-
   const toggleSortBrandOptions = () => {
     setSortBrandOptionsVisible((prevState) => !prevState);
   };
@@ -149,6 +129,18 @@ export default function HomePage() {
       setLoadedProductsCount(filteredProducts.length);
     }
     setSortBrandOptionsVisible(false);
+  };
+
+
+  const handleSearch = (searchValue) => {
+    if (searchValue) {
+      const filteredProducts = products.filter((product) =>
+        product.name.toLowerCase().includes(searchValue.toLowerCase())
+      );
+      setSearchFilteredProducts(filteredProducts);
+    } else {
+      setSearchFilteredProducts([]);
+    }
   };
 
 
@@ -171,7 +163,10 @@ export default function HomePage() {
       <HomeStyle />
       <Header cartItems={cartItems} navigateToCheckout={navigateToCheckout} />
       <TextHome userName={userAuth.userName} />
-      <SearchBar />
+      <SearchBar
+        handleSearch={handleSearch}
+        searchFilteredProducts={searchFilteredProducts}
+      />
       <ProductsContainerWrapper>
         <ProductsContainer ref={productsContainerRef}>
           <Sort>
@@ -193,7 +188,34 @@ export default function HomePage() {
             </SortContainer>
           </Sort>
           <div>
-            {products
+
+            {(searchFilteredProducts.length > 0
+              ? searchFilteredProducts
+              : products.filter(
+                  (product) => selectedBrand === "" || product.brand === selectedBrand
+                )
+            )
+              .slice(0, currentPage * perPage)
+              .map((product) => (
+                <SneakerItem key={product._id}>
+                  <SneakerImage src={product.image} alt={product.title} />
+                  <SneakerTitle>{product.name}</SneakerTitle>
+                  <SneakerPrice>${product.price}</SneakerPrice>
+                </SneakerItem>
+              ))}
+              : {products
+                .filter(
+                  (product) => selectedBrand === "" || product.brand === selectedBrand
+                )
+                .slice(0, currentPage * perPage)
+                .map((product) => (
+                  <SneakerItem key={product._id}>
+                    <SneakerImage src={product.image} alt={product.title} />
+                    <SneakerTitle>{product.name}</SneakerTitle>
+                    <SneakerPrice>${product.price}</SneakerPrice>
+                  </SneakerItem>
+                ))}
+            {/* {products
               .filter(
                 (product) => selectedBrand === "" || product.brand === selectedBrand
               )
@@ -204,38 +226,38 @@ export default function HomePage() {
                   <SneakerTitle>{product.name}</SneakerTitle>
                   <SneakerPrice>${product.price}</SneakerPrice>
                 </SneakerItem>
-              ))}
+              ))} */}
           </div>
           {selectedBrand === "" ? (
-          <>
-            {currentPage * perPage < products.length && (
+            <>
+              {currentPage * perPage < products.length && (
+                <LoadMoreButton onClick={handleLoadMore}>
+                  Carregar mais
+                </LoadMoreButton>
+              )}
+
+              {currentPage * perPage >= products.length && (
+                <LoadMoreButton onClick={handleLoadLess}>
+                  Carregar menos
+                </LoadMoreButton>
+              )}
+            </>
+          ) : (<>
+
+            {currentPage * perPage < products.filter((product) => product.brand === selectedBrand).length && (
+              console.log('entrou'),
+              console.log('quantidade de produtos:' + products),
               <LoadMoreButton onClick={handleLoadMore}>
                 Carregar mais
               </LoadMoreButton>
             )}
 
-            {currentPage * perPage >= products.length && (
+            {currentPage * perPage >= products.filter((product) => product.brand === selectedBrand).length && (
               <LoadMoreButton onClick={handleLoadLess}>
                 Carregar menos
               </LoadMoreButton>
             )}
-          </>
-        ) : (<>
-        
-          {currentPage * perPage < products.filter((product) => product.brand === selectedBrand).length && (
-            console.log('entrou'),
-              console.log('quantidade de produtos:' + products),
-            <LoadMoreButton onClick={handleLoadMore}>
-              Carregar mais
-            </LoadMoreButton>
-          )}
-
-          {currentPage * perPage >= products.filter((product) => product.brand === selectedBrand).length && (
-            <LoadMoreButton onClick={handleLoadLess}>
-              Carregar menos
-            </LoadMoreButton>
-          )}
-        </>)}
+          </>)}
 
 
 

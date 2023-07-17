@@ -32,6 +32,30 @@ function getProducts(token) {
     return promise;
 }
 
+function getSuggestions(token) {
+    const config = { headers: { Authorization: `Bearer ${token}` } };
+    const promise = axios.get(`${import.meta.env.VITE_API_URL}/product-suggestions`, config);
+    return promise;
+}
+
+function searchProducts(token, searchValue) {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` },
+      params: { search: searchValue },
+    };
+
+    console.log(config)
+  
+    const promise = axios.get(
+      `${import.meta.env.VITE_API_URL}/products-search`,
+      config
+    );
+    
+    return promise;
+  }
+
+
+
 // function createTransaction(body, token) {
 //     const config = configToken(token)
 //     const promise = axios.post(`${import.meta.env.VITE_API_URL}/transactions`, body, config)
@@ -63,7 +87,9 @@ const apis = {
     login,
     signUp,
     logout,
-    getProducts
+    getProducts,
+    getSuggestions,
+    searchProducts
 }
 
 export default apis;
