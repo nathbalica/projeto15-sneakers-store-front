@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { CartCount, CartIcon } from "../pages/HomePage";
+import { CartCount, CartIcon } from "./Header/styles";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useContext } from "react";
 import CartContext from "../contexts/CartContext";
