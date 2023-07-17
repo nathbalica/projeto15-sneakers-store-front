@@ -4,7 +4,7 @@ import MyWalletLogo from "../components/MyWalletLogo"
 import useAuth from "../hooks/auth"
 import apis from "../services/apis"
 import { useNavigate } from "react-router-dom"
-import { useState } from "react"
+import { useState, useRef } from "react"
 
 
 
@@ -14,6 +14,28 @@ export default function SignInPage() {
 
   const navigate = useNavigate()
 
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [invalidFields, setInvalidFields] = useState({});
+
+  function validateForm() {
+    let invalidFields = {};
+
+    // Validação do e-mail
+    const emailRegex = /^\S+@\S+\.\S+$/;
+    if (!emailRegex.test(form.email)) {
+      invalidFields.email = true;
+    }
+
+    // Validação da senha
+    if (form.password.length < 3) {
+      invalidFields.password = true;
+    }
+
+    setInvalidFields(invalidFields);
+    return Object.keys(invalidFields).length === 0;
+  }
 
   function handleForm(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -21,14 +43,23 @@ export default function SignInPage() {
 
   function loginUser(e) {
     e.preventDefault()
+
+    if (!validateForm()) {
+      setErrorMessage('Por favor, corrija os campos inválidos.');
+      return;
+    }
     
     apis.login({ ...form })
       .then(res => {
         login(res.data)
         navigate('/home')
       })
-      .catch(() => {
-        alert('Erro, tente novamente');
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          setErrorMessage('Credenciais inválidas. Verifique seu e-mail e senha.');
+        } else {
+          setErrorMessage('Erro, tente novamente.');
+        }
       })
   }
 
@@ -36,17 +67,19 @@ export default function SignInPage() {
     <SingInContainer>
       <form onSubmit={loginUser}>
         <MyWalletLogo />
-        <input
-        data-test="email"
+        <Input
+          data-test="email"
           placeholder="E-mail"
           type="email"
           name="email"
           value={form.email}
           onChange={handleForm}
           autoComplete="username"
+          invalid={invalidFields.email}
+          ref={emailRef}
         />
-        <input
-        data-test="password"
+        <Input
+          data-test="password"
           placeholder="Senha"
           minLength={3}
           type="password"
@@ -54,8 +87,11 @@ export default function SignInPage() {
           name="password"
           value={form.password}
           onChange={handleForm}
+          invalid={invalidFields.password}
+          ref={passwordRef}
           
         />
+         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
         <button className="auth-button" type="submit" data-test="sign-in-submit">Entrar</button>
       </form>
 
@@ -80,4 +116,13 @@ const SingInContainer = styled.section`
 
 const GreenText = styled.span`
   color: #0ACF83;
+`;
+
+const ErrorMessage = styled.div`
+  color: red;
+  margin-bottom: 10px;
+`;
+
+const Input = styled.input`
+  border: ${({ invalid }) => invalid ? '1px solid red' : 'initial'};
 `;

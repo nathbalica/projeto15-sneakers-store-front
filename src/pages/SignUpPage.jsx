@@ -11,7 +11,8 @@ import useAuth from "../hooks/auth";
 
 export default function SignUpPage() {
   const [form, setForm] = useState({ name: "", email: "", password: "", confirmPassword: "" })
-
+  const [errorMessage, setErrorMessage] = useState('')
+  const [invalidFields, setInvalidFields] = useState({})
 
   const navigate = useNavigate()
 
@@ -19,10 +20,38 @@ export default function SignUpPage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
+  function validateForm() {
+    let invalidFields = {};
+
+    // Validação do nome
+    if (form.name.trim() === "") {
+      invalidFields.name = true;
+    }
+
+    // Validação do e-mail
+    const emailRegex = /^\S+@\S+\.\S+$/;
+    if (!emailRegex.test(form.email)) {
+      invalidFields.email = true;
+    }
+
+    // Validação da senha
+    if (form.password.length < 3) {
+      invalidFields.password = true;
+    }
+
+    // Validação da confirmação de senha
+    if (form.password !== form.confirmPassword) {
+      invalidFields.confirmPassword = true;
+    }
+
+    setInvalidFields(invalidFields);
+    return Object.keys(invalidFields).length === 0;
+  }
+
   function register(e) {
     e.preventDefault()
-    if (form.password !== form.confirmPassword) {
-      alert("As senhas não coincidem!");
+    if (!validateForm()) {
+      setErrorMessage('Por favor, corrija os campos inválidos.');
       return;
     }
 
@@ -36,7 +65,11 @@ export default function SignUpPage() {
     });
     promise.catch(err => {
 
-      alert(err.response.data);
+      if (err.response && err.response.status === 409) {
+        setErrorMessage('E-mail já cadastrado. Por favor, utilize outro e-mail.');
+      } else {
+        setErrorMessage('Erro, tente novamente.');
+      }
 
     })
 
@@ -46,7 +79,7 @@ export default function SignUpPage() {
     <SingUpContainer>
         <MyWalletLogo />
       <form onSubmit={register}>
-        <input
+        <Input
           data-test="name"
           placeholder="Nome"
           type="text"
@@ -54,9 +87,10 @@ export default function SignUpPage() {
           onChange={handleForm}
           value={form.name}
           required
+          invalid={invalidFields.name}
 
         />
-        <input
+        <Input
           data-test="email"
           placeholder="E-mail"
           type="email"
@@ -64,9 +98,10 @@ export default function SignUpPage() {
           onChange={handleForm}
           value={form.email}
           required
+          invalid={invalidFields.email}
 
         />
-        <input
+        <Input
           data-test="password"
           placeholder="Senha"
           type="password"
@@ -75,9 +110,10 @@ export default function SignUpPage() {
           onChange={handleForm}
           value={form.password}
           required
+          invalid={invalidFields.password}
 
         />
-        <input
+        <Input
           data-test="conf-password"
           placeholder="Confirme a senha"
           type="password"
@@ -86,12 +122,14 @@ export default function SignUpPage() {
           onChange={handleForm}
           value={form.confirmPassword}
           required
+          invalid={invalidFields.confirmPassword}
         />
         <button className="auth-button" type="submit" data-test="sign-up-submit">
           Cadastrar
         </button>
       </form>
 
+      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
       <Link to="/">
         Já tem uma conta? <GreenText>Entre agora!</GreenText>
       </Link>
@@ -113,3 +151,12 @@ const SingUpContainer = styled.section`
 const GreenText = styled.span`
   color: #0ACF83;
 `;
+
+const ErrorMessage = styled.div`
+  color: red;
+  margin-top: 10px;
+`
+
+const Input = styled.input`
+  border: ${({ invalid }) => invalid ? '1px solid red' : 'initial'};
+`
