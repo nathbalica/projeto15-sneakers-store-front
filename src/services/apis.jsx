@@ -25,6 +25,12 @@ function logout(token){
     return promise;
 }
 
+function getSession(token) {
+    const promise = axios.get(`${import.meta.env.VITE_API_URL}/session/${token}`);
+
+    return promise;
+}
+
 
 function getProducts(token) {
     const config = { headers: { Authorization: `Bearer ${token}` } };
@@ -54,33 +60,26 @@ function searchProducts(token, searchValue) {
     return promise;
   }
 
+function getOrder(token) {
+    const config = configToken(token);
+    const promise = axios.get(`${import.meta.env.VITE_API_URL}/checkout`, config);
 
+    return promise;
+}
 
-// function createTransaction(body, token) {
-//     const config = configToken(token)
-//     const promise = axios.post(`${import.meta.env.VITE_API_URL}/transactions`, body, config)
+function finishOrder(token) {
+    const config = configToken(token);
+    const promise = axios.delete(`${import.meta.env.VITE_API_URL}/checkout`, config);
 
-//     return promise;
-// }
+    return promise;
+}
 
-// function deleteTransaction(transactionId, token){
-//     const config = configToken(token)
-//     const promise = axios.delete(`${import.meta.env.VITE_API_URL}/transactions/${transactionId}`, config)
+function cancelOrder(token){
+    const config = configToken(token);
+    const promise = axios.delete(`${import.meta.env.VITE_API_URL}/cancel-checkout`, config);
 
-//     return promise;
-// }
-
-// function updateTransaction(transactionId, token, body) {
-//     const config = configToken(token);
-//     const promise = axios.put(
-//       `${import.meta.env.VITE_API_URL}/transactions/${transactionId}`,
-//       body,
-//       config
-//     );
-  
-//     return promise;
-//   }
-
+    return promise;
+}
 
 
 const apis = {
@@ -89,7 +88,11 @@ const apis = {
     logout,
     getProducts,
     getSuggestions,
-    searchProducts
+    searchProducts,
+    getSession,
+    getOrder,
+    finishOrder,
+    cancelOrder
 }
 
 export default apis;

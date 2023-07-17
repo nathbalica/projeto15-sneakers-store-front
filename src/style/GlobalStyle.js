@@ -2,10 +2,14 @@ import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
     * {
-        font-family: 'Raleway';
-        font-style: normal;
-        font-weight: 400;
-    }
+        font-family: 'Montserrat', sans-serif;
+     }
+
+     ion-icon {
+        width: 30px;
+        height: 30px;
+     }
+     
     .auth-button {
         outline: none;
         border: none;
@@ -61,6 +65,4 @@ const GlobalStyle = createGlobalStyle`
     }
 `
 
-
-
-export default GlobalStyle
+export default GlobalStyle;

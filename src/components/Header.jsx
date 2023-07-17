@@ -2,20 +2,42 @@ import React from "react";
 import { BiExit } from "react-icons/bi";
 import styled from "styled-components";
 import { AiOutlineShoppingCart } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { CartCount, CartIcon } from "../pages/HomePage";
+import { AiOutlineShoppingCart } from "react-icons/ai";
+import { useContext } from "react";
+import CartContext from "../contexts/CartContext";
 
-export default function Header({ cartItems, navigateToCheckout }) {
+// export default function Header({ cartItems, navigateToCheckout }) {
+//   return (
+//     <HeaderContainer>
+//       <BiExit color="#fff" />
+//       <CartIcon onClick={navigateToCheckout}>
+//         <AiOutlineShoppingCart color="#fff" />
+//         <CartCount>{cartItems}</CartCount>
+//       </CartIcon>
+//     </HeaderContainer>
+//   );
+// }
+
+export default function Header() {
+  const navigate = useNavigate();
+  const {cartItens} = useContext(CartContext);
+
   return (
-    <HeaderContainer>
-      <BiExit color="#fff" />
-      <CartIcon onClick={navigateToCheckout}>
-        <AiOutlineShoppingCart color="#fff" />
-        <CartCount>{cartItems}</CartCount>
-      </CartIcon>
-    </HeaderContainer>
+      <StyledHeader>
+          <ion-icon onClick={() => navigate(-1)} name="chevron-back-outline"></ion-icon>
+          <CartIcon onClick={() => navigate("/meu-carrinho")}>
+              <AiOutlineShoppingCart />
+              {cartItens && <CartCount>{cartItens.length}</CartCount>}
+          </CartIcon>
+      </StyledHeader>
   );
 }
 
-export const HeaderContainer = styled.header`
+
+const StyledHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -44,3 +66,6 @@ export const CartCount = styled.span`
   font-size: 12px;
 `;
 
+export const HeaderContainer = styled.header`
+
+`
