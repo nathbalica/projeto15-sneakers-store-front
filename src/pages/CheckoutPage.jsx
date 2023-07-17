@@ -20,7 +20,8 @@ export default function CheckoutPage() {
         apis.getOrder(token)
             .then(res => {
                 setItems(res.data)
-                items.forEach(item => setTotal(prevTotal => prevTotal + item.price));
+                const itemsTotal = [...res.data]
+                itemsTotal.forEach(item => setTotal(prevTotal => prevTotal + item.price));
             })
             .catch(res => console.log(res));
     },[])
@@ -47,6 +48,8 @@ export default function CheckoutPage() {
 
         navigate('/home');
     }
+
+    console.log(total)
 
     if (items.length===0) {
         return <div>Carregando...</div>
