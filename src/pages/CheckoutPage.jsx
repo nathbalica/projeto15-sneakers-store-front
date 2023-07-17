@@ -30,7 +30,10 @@ export default function CheckoutPage() {
     function finishPurchase() {
         setFinish(true);
         apis.finishOrder(userAuth.token)
-            .then(res => console.log('Compra Concluída'))
+            .then(res => {
+                setItems([]);
+                console.log('Compra Concluída')
+            })
             .catch(res => console.log("Falha ao concluir compra"));
     }
 
