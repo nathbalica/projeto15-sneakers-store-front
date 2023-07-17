@@ -49,8 +49,6 @@ function searchProducts(token, searchValue) {
       headers: { Authorization: `Bearer ${token}` },
       params: { search: searchValue },
     };
-
-    console.log(config)
   
     const promise = axios.get(
       `${import.meta.env.VITE_API_URL}/products-search`,

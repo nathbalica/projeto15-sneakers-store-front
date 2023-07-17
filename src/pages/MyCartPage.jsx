@@ -15,7 +15,6 @@ export default function MyCart() {
     const navigate = useNavigate();
     const {setCartItens, cartItens} = useContext(CartContext);
     const {userAuth} = useContext(AuthContext);
-    console.log(cartItens);
 
     function calculaTotal() {
         let total = 0;
@@ -46,7 +45,7 @@ export default function MyCart() {
                 <ion-icon onClick={esvaziarCarrinho} name="trash-outline"></ion-icon>
             </StyledHeader>
             <PageContainer>
-                {cartItens && cartItens.map(p => <ProductCartCard key={p._id} produto={p}/>)}
+                {cartItens && cartItens.map((p, index) => <ProductCartCard key={`${p._id}-${index}`} produto={p}/>)}
             </PageContainer>
             <AmountContainer>
                 <div>
