@@ -21,7 +21,8 @@ export default function CheckoutPage() {
             .then(res => {
                 console.log(res.data)
                 setItems(res.data)
-                items.forEach(item => setTotal(prevTotal => prevTotal + item.price));
+                const itemsTotal = [...res.data]
+                itemsTotal.forEach(item => setTotal(prevTotal => prevTotal + item.price));
             })
             .catch(res => console.log(res));
     },[])
@@ -48,6 +49,8 @@ export default function CheckoutPage() {
 
         navigate('/home');
     }
+
+    console.log(total)
 
     if (items.length===0) {
         return <div>Carregando...</div>
