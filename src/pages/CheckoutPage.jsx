@@ -57,10 +57,6 @@ export default function CheckoutPage() {
     }
 
     console.log(total)
-
-    if (items.length===0) {
-        return <div>Carregando...</div>
-    } else{
     
 
     return (
@@ -101,7 +97,7 @@ export default function CheckoutPage() {
                 </SCContainerButton>
             </>)}
         </>
-    )}
+    )
 }
 
 const SCHeader = styled.div`
