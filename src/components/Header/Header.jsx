@@ -6,6 +6,8 @@ import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useContext } from "react";
 import CartContext from "../../contexts/CartContext";
 import { CartIcon, CartCount } from "./styles";
+import useAuth from "../../hooks/auth";
+import apis from "../../services/apis";
 
 // export default function Header({ cartItems, navigateToCheckout }) {
 //   return (
@@ -22,10 +24,23 @@ import { CartIcon, CartCount } from "./styles";
 export default function Header() {
   const navigate = useNavigate();
   const {cartItens} = useContext(CartContext);
+  const { userAuth, login } = useAuth();
+
+  function handleLogout() {
+    apis.logout(userAuth.token)
+      .then(res => {
+        localStorage.removeItem("userAuth");
+        login(null);
+        navigate("/")
+      })
+      .catch((err) => {
+        alert(err.response.data)
+      })
+  }
 
   return (
       <StyledHeader>
-          <BiExit color="#fff" />
+          <BiExit color="#fff" onClick={handleLogout}/>
           <CartIcon onClick={() => navigate("/meu-carrinho")}>
               <AiOutlineShoppingCart />
               {cartItens && <CartCount>{cartItens.length}</CartCount>}
