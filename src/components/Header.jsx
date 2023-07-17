@@ -1,9 +1,7 @@
 import React from "react";
-import { BiExit } from "react-icons/bi";
+// import { BiExit } from "react-icons/bi";
 import styled from "styled-components";
-import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
 import { CartCount, CartIcon } from "../pages/HomePage";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useContext } from "react";
